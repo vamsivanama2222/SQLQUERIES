@@ -1,0 +1,45 @@
+
+DROP database if exists Practice;
+create database Practice;
+use Practice;
+
+create table exam(exam_id int,exam_name varchar(100) not null, YEAR date default(2000), exam_fee double,isPass bool default(false),primary key(exam_id));
+
+
+insert into exam values(1,'AWS',curdate()-2,15000,true);
+insert into exam values(2,'AWS2',curdate()-2,150,null);
+insert into exam values(3,'Google',curdate()-1,12000,true);
+insert into exam values(4,'Azure',curdate()-2,1300,null);
+insert into exam values(5,'AWS3',curdate()-3,15400,true);
+
+select * from exam;
+desc exam;
+alter table exam alter isPass set default false;
+insert into exam(exam_id,exam_name,YEAR,exam_fee) values(6,'Azure2',curdate()-2,13200);
+alter table exam modify exam_id int auto_increment;
+alter table exam rename column YEAR TO  exam_year;
+
+desc exam;
+
+select * from exam where exam_id not in(2,5);
+
+
+select max(exam_fee) from exam;
+select max(exam_fee) from exam where exam_fee < (select max(exam_fee) from exam);
+
+create table Students(std_id int auto_increment, std_name varchar(100), std_age int, exam_id int,primary key(std_id), foreign key(exam_id) references exam(exam_id));
+
+
+insert into Students values(1,'RAM',25,1);
+insert into Students values(2,'KIRAN',27,2);
+insert into Students values(3,'SOM',45,3);
+insert into Students values(4,'SARALA',35,4);
+insert into Students values(5,'SUKU',21,1);
+
+select * from Students;
+
+
+select count(s.std_name),e.exam_name,sum(e.exam_fee) from Students s,exam e where s.exam_id=e.exam_id and e.isPass=true group by(e.exam_id);
+
+
+
